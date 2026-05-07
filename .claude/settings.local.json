@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C \"c:/Users/rober/Dropbox/LMU/Teaching/ComputationalEcon/ComputationalEcon\" ls-files --error-unmatch notebooks/notebook.css)"
+      "Bash(git -C \"c:/Users/rober/Dropbox/LMU/Teaching/ComputationalEcon/ComputationalEcon\" ls-files --error-unmatch notebooks/notebook.css)",
+      "Bash(uvx --version)",
+      "Bash(uv --version)",
+      "Bash(uvx marimo *)"
     ]
   }
 }

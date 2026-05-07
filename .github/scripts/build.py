@@ -31,12 +31,18 @@ import fire
 from loguru import logger
 
 
+def _parse_notebook(notebook_path: Path) -> Optional[ast.Module]:
+    try:
+        return ast.parse(notebook_path.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError) as e:
+        logger.warning(f"Could not parse {notebook_path}: {e}")
+        return None
+
+
 def _extract_app_title(notebook_path: Path) -> Optional[str]:
     """Return the app_title from a notebook's marimo.App(...) call, if set."""
-    try:
-        tree = ast.parse(notebook_path.read_text(encoding="utf-8"))
-    except (OSError, SyntaxError) as e:
-        logger.warning(f"Could not parse {notebook_path} for app_title: {e}")
+    tree = _parse_notebook(notebook_path)
+    if tree is None:
         return None
 
     for node in ast.walk(tree):
@@ -52,6 +58,26 @@ def _extract_app_title(notebook_path: Path) -> Optional[str]:
                 and isinstance(kw.value.value, str)
             ):
                 return kw.value.value
+    return None
+
+
+def _extract_description(notebook_path: Path) -> Optional[str]:
+    """Return the value of a module-level `__description__ = "..."` assignment."""
+    tree = _parse_notebook(notebook_path)
+    if tree is None:
+        return None
+
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            if (
+                isinstance(target, ast.Name)
+                and target.id == "__description__"
+                and isinstance(node.value, ast.Constant)
+                and isinstance(node.value.value, str)
+            ):
+                return node.value.value
     return None
 
 
@@ -74,10 +100,22 @@ def _export_html_wasm(
     try:
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
-        cmd.extend([str(notebook_path), "-o", str(output_file)])
+        # Run from the notebook's directory so marimo resolves `css_file=`
+        # (and any other notebook-relative paths) against that folder. We pass
+        # absolute paths for the notebook and the output to keep the rest of
+        # the build's path semantics intact.
+        notebook_abs = notebook_path.resolve()
+        output_abs = output_file.resolve()
+        cmd.extend([str(notebook_abs), "-o", str(output_abs)])
 
-        logger.debug(f"Running command: {cmd}")
-        subprocess.run(cmd, capture_output=True, text=True, check=True)
+        logger.debug(f"Running command: {cmd} (cwd={notebook_abs.parent})")
+        subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=notebook_abs.parent,
+        )
 
         logger.info(f"Successfully exported {notebook_path}")
         return True
@@ -176,6 +214,7 @@ def _export_from_notebooks(
             notebook_data.append(
                 {
                     "display_name": display_name,
+                    "description": _extract_description(nb),
                     "html_path": str(html_path),
                 }
             )

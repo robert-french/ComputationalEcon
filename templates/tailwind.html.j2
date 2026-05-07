@@ -83,8 +83,7 @@
             </h3>
 
             <p class="mt-3 text-slate-600 leading-7">
-              View the polished version for lecture, or open the editable version
-              to experiment with the code.
+              {{ app.description or "View the polished version for lecture, or open the editable version to experiment with the code." }}
             </p>
 
             <div class="mt-6 flex flex-wrap gap-3">
@@ -137,7 +136,7 @@
           </h3>
 
           <p class="mt-3 text-slate-600 leading-7">
-            Open this editable notebook in your browser.
+            {{ notebook.description or "Open this editable notebook in your browser." }}
           </p>
 
           <div class="mt-6">

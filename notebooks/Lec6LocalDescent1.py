@@ -1,6 +1,13 @@
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "marimo>=0.23.5",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.23.3"
+__description__ = "Direct search, gradient descent, and step-size choice in one dimension."
 app = marimo.App(
     width="compact",                       # spans browser width
     css_file="marimo-overrides.css",       # hides marimo's floating outline
@@ -23,7 +30,7 @@ def _():
 def _(mo):
     mo.sidebar(
         [
-            mo.md('<a href="https://robert-french.github.io/" target="_self" style="display: block; margin-bottom: 1.5em;">Course home</a>'),
+            mo.md('<a href="https://robert-french.github.io/ComputationalEcon/" target="_self" style="display: block; margin-bottom: 1.5em;">Course home</a>'),
             mo.md("# [Lecture 6](#top)"),
             mo.md("**Local Descent in One Dimension**"),
             mo.nav_menu(
@@ -54,8 +61,8 @@ def _():
 def _(mo):
     mo.hstack(
         [
-            mo.md('<a href="https://robert-french.github.io/" target="_self">← Lecture 5</a>'),
-            mo.md('<a href="https://robert-french.github.io/" target="_self">Lecture 7 →</a>'),
+            mo.md('<a href="https://robert-french.github.io/ComputationalEcon/" target="_self">← Lecture 5</a>'),
+            mo.md('<a href="https://robert-french.github.io/ComputationalEcon/" target="_self">Lecture 7 →</a>'),
         ],
         justify="space-between", align="center",
     )

@@ -19,6 +19,7 @@ The script also generates an index.html file that lists both versions.
 # ]
 # ///
 
+import shutil
 import subprocess
 from typing import List, Union
 from pathlib import Path
@@ -202,6 +203,16 @@ def main(
         apps_data=apps_data,
         template_file=template_file,
     )
+
+    # Copy any static assets sitting next to the template (e.g. the LMU shield
+    # watermark) into the site root so the rendered index.html can reference
+    # them with relative paths.
+    static_dir = template_file.parent / "static"
+    if static_dir.exists():
+        for asset in static_dir.iterdir():
+            if asset.is_file():
+                shutil.copy2(asset, output_dir / asset.name)
+                logger.info(f"Copied static asset {asset.name} to {output_dir}")
 
     logger.info(f"Build completed successfully. Output directory: {output_dir}")
 

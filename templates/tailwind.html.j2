@@ -13,7 +13,19 @@
 
 <body class="bg-slate-50 text-slate-900 font-sans">
 
-  <main class="max-w-6xl mx-auto px-6 py-12">
+  <!-- Faint LMU shield watermark behind page content -->
+  <div
+    aria-hidden="true"
+    class="pointer-events-none fixed inset-0 -z-10 flex items-center justify-center"
+  >
+    <img
+      src="LMU_SquareOrig.png"
+      alt=""
+      class="w-[640px] max-w-[80vw] opacity-[0.06]"
+    />
+  </div>
+
+  <main class="relative max-w-6xl mx-auto px-6 py-12">
 
     <!-- ========================================================= -->
     <!-- HEADER                                                    -->
@@ -22,7 +34,7 @@
 
     <header class="mb-12">
       <p class="text-sm font-semibold tracking-wide uppercase text-slate-500">
-        Interactive Course Notebooks
+        ECON 4998
       </p>
 
       <h1 class="mt-3 text-4xl md:text-5xl font-bold tracking-tight">

@@ -1,7 +1,11 @@
 import marimo
 
 __generated_with = "0.23.3"
-app = marimo.App(width="compact", css_file="notebook.css")   # spans browser width; css hides marimo's floating outline
+app = marimo.App(
+    width="compact",                       # spans browser width
+    css_file="marimo-overrides.css",       # hides marimo's floating outline
+    app_title="Lecture 6: Local Descent I",  # title shown on the homepage card and notebook tab
+)
 
 @app.cell(hide_code=True)
 def _():

@@ -19,15 +19,40 @@ The script also generates an index.html file that lists both versions.
 # ]
 # ///
 
+import ast
 import shutil
 import subprocess
-from typing import List, Union
+from typing import List, Optional, Union
 from pathlib import Path
 
 import jinja2
 import fire
 
 from loguru import logger
+
+
+def _extract_app_title(notebook_path: Path) -> Optional[str]:
+    """Return the app_title from a notebook's marimo.App(...) call, if set."""
+    try:
+        tree = ast.parse(notebook_path.read_text(encoding="utf-8"))
+    except (OSError, SyntaxError) as e:
+        logger.warning(f"Could not parse {notebook_path} for app_title: {e}")
+        return None
+
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if not (isinstance(func, ast.Attribute) and func.attr == "App"):
+            continue
+        for kw in node.keywords:
+            if (
+                kw.arg == "app_title"
+                and isinstance(kw.value, ast.Constant)
+                and isinstance(kw.value.value, str)
+            ):
+                return kw.value.value
+    return None
 
 
 def _export_html_wasm(
@@ -147,9 +172,10 @@ def _export_from_notebooks(
         )
 
         if success:
+            display_name = _extract_app_title(nb) or nb.stem.replace("_", " ").title()
             notebook_data.append(
                 {
-                    "display_name": nb.stem.replace("_", " ").title(),
+                    "display_name": display_name,
                     "html_path": str(html_path),
                 }
             )

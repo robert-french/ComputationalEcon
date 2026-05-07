@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"c:/Users/rober/Dropbox/LMU/Teaching/ComputationalEcon/ComputationalEcon\" ls-files --error-unmatch notebooks/notebook.css)"
+    ]
+  }
+}

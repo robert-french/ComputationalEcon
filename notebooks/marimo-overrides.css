@@ -1,0 +1,43 @@
+/* Hide marimo's auto-generated floating outline panel.
+   Targets the Tailwind class combo on the outline container in
+   _static/assets/floating-outline-*.js. Brittle to marimo upgrades —
+   if the panel reappears, re-derive the selector from the bundle. */
+.fixed.top-\[25vh\].right-8.z-10000 {
+    display: none !important;
+}
+
+/* "#top" jumps to the very top of the page: a huge scroll-margin
+   makes the browser clamp the resulting scroll position to 0. */
+#top {
+    scroll-margin-top: 200vh;
+}
+
+/* Keep clicked links from turning purple. Browsers restrict var() in
+   :visited rules for privacy, so use hardcoded values that match the
+   marimo --link variable from index-*.css (#0b68cb / #479bf5). */
+a:visited,
+a:link:visited,
+a.hyperlink:visited {
+    color: #0b68cb !important;
+}
+@media (prefers-color-scheme: dark) {
+    a:visited,
+    a:link:visited,
+    a.hyperlink:visited {
+        color: #479bf5 !important;
+    }
+}
+
+/* Tighter vertical rhythm for section headings. Halves the browser
+   default to keep section breaks readable but less airy. */
+h2 {
+    margin-top: 0.6em !important;
+    margin-bottom: 0.3em !important;
+}
+
+/* Reduce vertical space around mo.callout boxes (class injected by
+   marimo, see _static/assets/index-*.js). */
+.marimo-callout-output {
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important;
+}

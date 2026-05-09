@@ -1019,5 +1019,15 @@ def _(mo):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(r"""
+    ---
+
+    Curious about the code underlying this notebook? [![Open in molab](https://marimo.io/molab-shield.svg)](https://molab.marimo.io/github/robert-french/ComputationalEcon/blob/main/notebooks/Lec6LocalDescent1.py) to explore it yourself!
+    """)
+    return
+
+
 if __name__ == "__main__":
     app.run()
